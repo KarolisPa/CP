@@ -81,10 +81,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
   },
   mounted: function mounted() {
-    this.getEventList();
+    this.getOrganizers();
   },
   methods: {
-    getEventList: function getEventList() {
+    getOrganizers: function getOrganizers() {
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {

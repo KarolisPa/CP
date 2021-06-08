@@ -6,7 +6,7 @@
                     <h4>Pridėti renginį</h4>
                 </div>
                 <div class="card-body">
-                    <form @submit.prevent="create" method="post">
+                    <form @submit.prevent="check" method="post">
                         <div class="row">
                             <div class="col-12 mb-2">
                                 <div class="form-group">
@@ -32,6 +32,7 @@
                                     <input type="text" class="form-control" id="place" v-model="event.place">
                                 </div>
                             </div>
+
                             <div class="col-12">
                                 <button type="submit" class="btn btn-primary">Išsaugoti</button>
                             </div>
@@ -40,6 +41,7 @@
 
                 </div>
             </div>
+
         </div>
     </div>
 </template>
@@ -47,25 +49,26 @@
 <script>
 export default {
     name: "EventAdd",
-    data(){
+    data() {
         return {
-            event:{
-                name:"",
-                start_date:"",
-                end_date:"",
-                place:"",
-            }
+            event: {
+                name: "",
+                start_date: "",
+                end_date: "",
+                place: "",
+            },
+
         }
     },
-    methods:{
-        async create(){
-            await this.axios.post('/api/events/add',this.event).then(response=>{
-                // this.$router.push({name:"EventList"})
-                this.$router.replace({name:"EventList"})
-            }).catch(error=>{
+    methods: {
+        async create() {
+            await this.axios.post('/api/events/add', this.event).then(response => {
+                this.$router.replace({name: "EventList"})
+            }).catch(error => {
                 console.log(error)
             })
         }
+
     }
 }
 </script>

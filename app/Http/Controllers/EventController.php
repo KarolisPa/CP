@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\Organizer;
 use Illuminate\Http\Request;
 use App\Http\Resources\EventResource;
 class EventController extends Controller
@@ -15,6 +16,11 @@ class EventController extends Controller
     public function index()
     {
         return EventResource::collection(Event::all());
+//        return Event::all()->with('organizers');
+//          $events = EventResource::collection(Event::orderBy('id', 'desc')->get());
+        //$events = Event::orderBy('id', 'desc')->with('organizers')->get();
+
+          //return $events;
 
     }
 
@@ -63,15 +69,19 @@ class EventController extends Controller
      * @param  \App\Models\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id)
+    public function edit(Request $request)
     {
+        $id = $request->route('id');
         $event = Event::find($id);
+
+
         if($event) {
             $eventInput = $request->validate([
                 'name' => 'required',
                 'start_date' => 'required',
                 'end_date' => 'required',
-                'place' => 'required'
+                'place' => 'required',
+                'organizers' => 'nullable'
             ]);
 
 
@@ -80,9 +90,29 @@ class EventController extends Controller
                 'start_date' => $eventInput['start_date'],
                 'end_date' => $eventInput['end_date'],
                 'place' => $eventInput['place']
+
             ]);
+//
+
+            if( $request->input("organizer_id") != null ) {
+                $organizerID = $request->input('organizer_id');
+
+                $organizer = Organizer::find($organizerID);
+                if ($organizer->event_id != null) {
+                    Organizer::create([
+                        "name" => $organizer->name,
+                        "event_id" => $id
+                    ]);
+                    $organizer->event_id = $id;
+                } else {
+                    $organizer->event_id = $id;
+                    $organizer->save();
+
+                }
+            }
 
         }
+
     }
 
     /**

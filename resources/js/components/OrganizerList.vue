@@ -50,12 +50,13 @@ export default {
         }
     },
     mounted(){
-        this.getEventList()
+        this.getOrganizers()
     },
     methods:{
-        async getEventList(){
+        async getOrganizers(){
             await this.axios.get('/api/organizers').then(response=>{
                 this.organizers = response.data.data
+
             }).catch(error=>{
                 console.log(error)
                 this.organizers = []

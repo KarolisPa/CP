@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
 {
-    protected $guarded = [];
+
     use HasFactory;
     protected $table = 'events';
     protected $fillable = [
@@ -20,6 +20,8 @@ class Event extends Model
 
     public function organizers()
     {
-        return $this->belongsToMany(Organizer::class);
+        return $this->belongsToMany(Organizer::class, 'events', 'id', 'id');
+//        return $this->belongsToMany('Namespace\Modules\Email\Models\Participant', 'PIVOT', 'message_id', 'user_id')->withTimestamps();
+
     }
 }
