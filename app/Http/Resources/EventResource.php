@@ -21,5 +21,6 @@ class EventResource extends JsonResource
       'end_date' => $this->end_date,
       'place' => $this->place
     ];
+
     }
 }

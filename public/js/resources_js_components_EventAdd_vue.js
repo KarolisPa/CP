@@ -76,6 +76,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "EventAdd",
   data: function data() {
@@ -99,7 +101,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context.next = 2;
                 return _this.axios.post('/api/events/add', _this.event).then(function (response) {
-                  // this.$router.push({name:"EventList"})
                   _this.$router.replace({
                     name: "EventList"
                   });
@@ -979,7 +980,7 @@ var render = function() {
               on: {
                 submit: function($event) {
                   $event.preventDefault()
-                  return _vm.create.apply(null, arguments)
+                  return _vm.check.apply(null, arguments)
                 }
               }
             },

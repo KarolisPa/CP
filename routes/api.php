@@ -23,7 +23,7 @@ Route::prefix('/events')->group(function () {
     Route::get('/', [EventController::class, 'index']);
     Route::post('/add', [EventController::class, 'store']);
     Route::get('/{id}', [EventController::class, 'show']);
-    Route::post('/{id}', [EventController::class, 'edit']);
+    Route::put('/{id}', [EventController::class, 'edit']);
     Route::delete('/{id}/delete', [EventController::class, "destroy"]);
 });
 Route::prefix('/organizers')->group(function () {

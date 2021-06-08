@@ -1002,7 +1002,7 @@ var render = function() {
             _c("table", { staticClass: "table table-bordered" }, [
               _vm._m(1),
               _vm._v(" "),
-              _vm.events.length > 0
+              _vm.events != null
                 ? _c(
                     "tbody",
                     _vm._l(_vm.events, function(event, key) {

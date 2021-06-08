@@ -32,6 +32,19 @@
                                     <input type="text" class="form-control" :placeholder="[ event.place ]" v-model="event.place">
                                 </div>
                             </div>
+                            <div class="col-12 mb-2">
+                                <div class="form-group">
+                                    <label for="organizers">Priskirkite organizatorių</label>
+                                    <select class="form-control" v-model="selected"  id="organizers">
+                                        <option value="" selected disabled>Pasirinkti organizatorių</option>
+                                        <option v-for="organizer in organizers" :value="organizer.id">
+                                            {{ organizer.name }}
+                                        </option>
+                                    </select>
+                                    <h1>{{selected}}</h1><p>  <--- Cia ID</p>
+
+                                </div>
+                            </div>
                             <div class="col-12">
                                 <button type="submit" class="btn btn-primary">Atnaujinti</button>
                             </div>
@@ -48,19 +61,32 @@ export default {
     name: "EventEdit",
     data(){
         return {
+            selected: '',
+            organizers:[],
             event:{
                 name:"",
                 start_date:"",
                 end_date:"",
-                place:""
+                place:"",
+                organizer_id:""
             }
         }
     },
     mounted(){
-        this.showCategory()
+        this.getEvents();
+        this.getOrganizers();
     },
     methods:{
-        async showCategory(){
+        getOrganizers(){
+            axios.get('/api/organizers').then(response=>{
+                this.organizers = response.data.data
+
+            }).catch(error=>{
+                console.log(error)
+                this.organizers = []
+            })
+        },
+        async getEvents(){
             await this.axios.get(`/api/events/${this.$route.params.id}`).then(response=>{
                 const { name, start_date, end_date, place } = response.data
                 this.event.name = name
@@ -72,7 +98,8 @@ export default {
             })
         },
         async update(){
-            await this.axios.post(`/api/events/${this.$route.params.id}`,this.event).then(response=>{
+            this.event.organizer_id = this.selected;
+            await this.axios.put(`/api/events/${this.$route.params.id}`,this.event).then(response=>{
                 this.$router.push({name:"EventList"})
             }).catch(error=>{
                 console.log(error)

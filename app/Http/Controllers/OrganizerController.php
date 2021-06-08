@@ -16,6 +16,7 @@ class OrganizerController extends Controller
     public function index()
     {
         return OrganizerResource::collection(Organizer::all());
+//         return Organizer::all();
     }
 
     /**
@@ -72,18 +73,6 @@ class OrganizerController extends Controller
             ]);
 
         }
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Organizer  $organizer
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Organizer $organizer)
-    {
-        //
     }
 
     /**

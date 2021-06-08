@@ -75,24 +75,51 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "EventEdit",
   data: function data() {
     return {
+      selected: '',
+      organizers: [],
       event: {
         name: "",
         start_date: "",
         end_date: "",
-        place: ""
+        place: "",
+        organizer_id: ""
       }
     };
   },
   mounted: function mounted() {
-    this.showCategory();
+    this.getEvents();
+    this.getOrganizers();
   },
   methods: {
-    showCategory: function showCategory() {
+    getOrganizers: function getOrganizers() {
       var _this = this;
+
+      axios.get('/api/organizers').then(function (response) {
+        _this.organizers = response.data.data;
+      })["catch"](function (error) {
+        console.log(error);
+        _this.organizers = [];
+      });
+    },
+    getEvents: function getEvents() {
+      var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
@@ -100,16 +127,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return _this.axios.get("/api/events/".concat(_this.$route.params.id)).then(function (response) {
+                return _this2.axios.get("/api/events/".concat(_this2.$route.params.id)).then(function (response) {
                   var _response$data = response.data,
                       name = _response$data.name,
                       start_date = _response$data.start_date,
                       end_date = _response$data.end_date,
                       place = _response$data.place;
-                  _this.event.name = name;
-                  _this.event.start_date = start_date;
-                  _this.event.end_date = end_date;
-                  _this.event.place = place;
+                  _this2.event.name = name;
+                  _this2.event.start_date = start_date;
+                  _this2.event.end_date = end_date;
+                  _this2.event.place = place;
                 })["catch"](function (error) {
                   console.log(error);
                 });
@@ -123,23 +150,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }))();
     },
     update: function update() {
-      var _this2 = this;
+      var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.next = 2;
-                return _this2.axios.post("/api/events/".concat(_this2.$route.params.id), _this2.event).then(function (response) {
-                  _this2.$router.push({
+                _this3.event.organizer_id = _this3.selected;
+                _context2.next = 3;
+                return _this3.axios.put("/api/events/".concat(_this3.$route.params.id), _this3.event).then(function (response) {
+                  _this3.$router.push({
                     name: "EventList"
                   });
                 })["catch"](function (error) {
                   console.log(error);
                 });
 
-              case 2:
+              case 3:
               case "end":
                 return _context2.stop();
             }
@@ -1131,6 +1159,70 @@ var render = function() {
                         }
                       }
                     })
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-12 mb-2" }, [
+                  _c("div", { staticClass: "form-group" }, [
+                    _c("label", { attrs: { for: "organizers" } }, [
+                      _vm._v("Priskirkite organizatorių")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.selected,
+                            expression: "selected"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { id: "organizers" },
+                        on: {
+                          change: function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.selected = $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          }
+                        }
+                      },
+                      [
+                        _c(
+                          "option",
+                          { attrs: { value: "", selected: "", disabled: "" } },
+                          [_vm._v("Pasirinkti organizatorių")]
+                        ),
+                        _vm._v(" "),
+                        _vm._l(_vm.organizers, function(organizer) {
+                          return _c(
+                            "option",
+                            { domProps: { value: organizer.id } },
+                            [
+                              _vm._v(
+                                "\n                                        " +
+                                  _vm._s(organizer.name) +
+                                  "\n                                    "
+                              )
+                            ]
+                          )
+                        })
+                      ],
+                      2
+                    ),
+                    _vm._v(" "),
+                    _c("h1", [_vm._v(_vm._s(_vm.selected))]),
+                    _c("p", [_vm._v("  <--- Cia ID")])
                   ])
                 ]),
                 _vm._v(" "),

@@ -21,7 +21,7 @@
                                 <th>Veiksmai</th>
                             </tr>
                             </thead>
-                            <tbody v-if="events.length > 0">
+                            <tbody v-if="events != null">
                             <tr v-for="(event,key) in events" :key="key">
                                 <td>{{ event.id }}</td>
                                 <td>{{ event.name }}</td>
@@ -52,7 +52,7 @@ export default {
     name: "EventList",
     data(){
         return {
-            events:[]
+            events:[],
         }
     },
     mounted(){
