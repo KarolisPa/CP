@@ -88,24 +88,34 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "EventEdit",
   data: function data() {
     return {
-      selected: '',
+      inputs: [],
+      selected: [],
       organizers: [],
       event: {
         name: "",
         start_date: "",
         end_date: "",
         place: "",
-        organizer_id: ""
+        organizer_id: []
       }
     };
   },
   mounted: function mounted() {
     this.getEvents();
     this.getOrganizers();
+    this.addRow();
   },
   methods: {
     getOrganizers: function getOrganizers() {
@@ -157,7 +167,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _this3.event.organizer_id = _this3.selected;
+                _this3.event.organizer_id.push(_this3.inputs);
+
                 _context2.next = 3;
                 return _this3.axios.put("/api/events/".concat(_this3.$route.params.id), _this3.event).then(function (response) {
                   _this3.$router.push({
@@ -174,6 +185,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee2);
       }))();
+    },
+    getSelected: function getSelected(index) {
+      var result = this.inputs;
+      result[index].id = this.selected;
+    },
+    addRow: function addRow() {
+      document.createElement('tr');
+      this.inputs.push({
+        id: 'value'
+      });
+    },
+    removeElement: function removeElement(index) {
+      this.rows.splice(index, 1);
     }
   }
 });
@@ -1163,70 +1187,95 @@ var render = function() {
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "col-12 mb-2" }, [
-                  _c("div", { staticClass: "form-group" }, [
-                    _c("label", { attrs: { for: "organizers" } }, [
-                      _vm._v("Priskirkite organizatorių")
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "select",
-                      {
-                        directives: [
+                  _c(
+                    "div",
+                    { staticClass: "form-group" },
+                    [
+                      _c("label", { attrs: { for: "organizers" } }, [
+                        _vm._v("Priskirkite organizatorių")
+                      ]),
+                      _vm._v(" "),
+                      _vm._l(_vm.inputs, function(row, index) {
+                        return _c(
+                          "select",
                           {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.selected,
-                            expression: "selected"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { id: "organizers" },
-                        on: {
-                          change: function($event) {
-                            var $$selectedVal = Array.prototype.filter
-                              .call($event.target.options, function(o) {
-                                return o.selected
-                              })
-                              .map(function(o) {
-                                var val = "_value" in o ? o._value : o.value
-                                return val
-                              })
-                            _vm.selected = $event.target.multiple
-                              ? $$selectedVal
-                              : $$selectedVal[0]
-                          }
-                        }
-                      },
-                      [
-                        _c(
-                          "option",
-                          { attrs: { value: "", selected: "", disabled: "" } },
-                          [_vm._v("Pasirinkti organizatorių")]
-                        ),
-                        _vm._v(" "),
-                        _vm._l(_vm.organizers, function(organizer) {
-                          return _c(
-                            "option",
-                            { domProps: { value: organizer.id } },
-                            [
-                              _vm._v(
-                                "\n                                        " +
-                                  _vm._s(organizer.name) +
-                                  "\n                                    "
-                              )
-                            ]
-                          )
-                        })
-                      ],
-                      2
-                    ),
-                    _vm._v(" "),
-                    _c("h1", [_vm._v(_vm._s(_vm.selected))]),
-                    _c("p", [_vm._v("  <--- Cia ID")])
-                  ])
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.selected,
+                                expression: "selected"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: { id: "organizers" },
+                            on: {
+                              change: [
+                                function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.selected = $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                },
+                                function($event) {
+                                  return _vm.getSelected(index)
+                                }
+                              ]
+                            }
+                          },
+                          _vm._l(_vm.organizers, function(organizer, ind) {
+                            return _c(
+                              "option",
+                              { domProps: { value: organizer.id } },
+                              [
+                                _vm._v(
+                                  "\n                                            " +
+                                    _vm._s(organizer.name) +
+                                    "\n                                        "
+                                )
+                              ]
+                            )
+                          }),
+                          0
+                        )
+                      }),
+                      _vm._v(" "),
+                      _c("h1", [_vm._v(_vm._s(_vm.selected))]),
+                      _vm._v(" "),
+                      _c("h2", [_vm._v(_vm._s(_vm.inputs))])
+                    ],
+                    2
+                  )
                 ]),
                 _vm._v(" "),
-                _vm._m(1)
+                _c("div", { staticClass: "col-12" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary",
+                      attrs: { type: "submit" }
+                    },
+                    [_vm._v("Atnaujinti")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary",
+                      attrs: { type: "button" },
+                      on: { click: _vm.addRow }
+                    },
+                    [_vm._v("+")]
+                  )
+                ])
               ])
             ]
           )
@@ -1242,18 +1291,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "card-header" }, [
       _c("h4", [_vm._v("Pakeisti Renginio informaciją")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-12" }, [
-      _c(
-        "button",
-        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-        [_vm._v("Atnaujinti")]
-      )
     ])
   }
 ]

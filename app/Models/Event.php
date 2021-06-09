@@ -21,7 +21,6 @@ class Event extends Model
     public function organizers()
     {
         return $this->belongsToMany(Organizer::class, 'events', 'id', 'id');
-//        return $this->belongsToMany('Namespace\Modules\Email\Models\Participant', 'PIVOT', 'message_id', 'user_id')->withTimestamps();
 
     }
 }
