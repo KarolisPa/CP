@@ -35,25 +35,33 @@
                             <div class="col-12 mb-2">
                                 <div class="form-group">
                                     <label for="organizers">Priskirkite organizatorių</label>
-                                    <select class="form-control" v-model="selected"  id="organizers">
-                                        <option value="" selected disabled>Pasirinkti organizatorių</option>
-                                        <option v-for="organizer in organizers" :value="organizer.id">
+                                    <select class="form-control" id="organizers" v-for="(row, index) in inputs"  v-model="selected" @change="getSelected(index)">
+<!--                                        <option value="" selected disabled>Pasirinkti organizatorių</option>-->
+                                        <option v-for="(organizer, ind) in organizers" :value="organizer.id">
                                             {{ organizer.name }}
                                         </option>
                                     </select>
-                                    <h1>{{selected}}</h1><p>  <--- Cia ID</p>
+                                    <h1>{{selected}}</h1>
+                                    <h2>{{inputs}}</h2>
+
+
 
                                 </div>
                             </div>
                             <div class="col-12">
                                 <button type="submit" class="btn btn-primary">Atnaujinti</button>
+                                <button type="button" class="btn btn-primary" @click="addRow">+</button>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
+
+
     </div>
+
+
 </template>
 
 <script>
@@ -61,20 +69,22 @@ export default {
     name: "EventEdit",
     data(){
         return {
-            selected: '',
+            inputs:[],
+            selected:[],
             organizers:[],
             event:{
                 name:"",
                 start_date:"",
                 end_date:"",
                 place:"",
-                organizer_id:""
+                organizer_id:[]
             }
         }
     },
     mounted(){
         this.getEvents();
         this.getOrganizers();
+        this.addRow();
     },
     methods:{
         getOrganizers(){
@@ -98,12 +108,26 @@ export default {
             })
         },
         async update(){
-            this.event.organizer_id = this.selected;
+            this.event.organizer_id.push(this.inputs);
             await this.axios.put(`/api/events/${this.$route.params.id}`,this.event).then(response=>{
                 this.$router.push({name:"EventList"})
             }).catch(error=>{
                 console.log(error)
             })
+        },
+        getSelected: function (index){
+            let result = this.inputs
+            result[index].id = this.selected
+        },
+        addRow: function() {
+            document.createElement('tr');
+            this.inputs.push({
+                id:'value'
+            })
+
+        },
+        removeElement: function(index) {
+            this.rows.splice(index, 1);
         }
     }
 

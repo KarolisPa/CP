@@ -21,7 +21,7 @@
                                 <th>Veiksmai</th>
                             </tr>
                             </thead>
-                            <tbody v-if="events != null">
+                            <tbody v-if="events.length > 0">
                             <tr v-for="(event,key) in events" :key="key">
                                 <td>{{ event.id }}</td>
                                 <td>{{ event.name }}</td>
